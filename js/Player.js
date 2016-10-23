@@ -4,6 +4,7 @@ Player = function (game, canvas) {
     this.scene = game.scene;
     this.axisMovement = [false, false, false, false];
 
+
     window.addEventListener("keyup", function (evt) {
         switch (evt.keyCode) {
             case 90:
@@ -68,7 +69,6 @@ Player = function (game, canvas) {
 Player.prototype = {
     _initPointerLock: function () {
         var _this = this;
-
         // Requete pour la capture du pointeur
         var canvas = this.scene.getEngine().getRenderingCanvas();
         canvas.addEventListener("click", function (evt) {
@@ -106,16 +106,20 @@ Player.prototype = {
         this.isAlive = true;
 
         this.camera.setTarget(BABYLON.Vector3.Zero());
-        // On affecte le mouvement de la caméra au canvas
-        //this.camera.attachControl(canvas, true);
+       
+        // Appel de la création des armes
+
+        this.camera.weapons = new Weapons(this);
     },
 
     _checkMove: function (ratioFps) {
+        this.speed = 0.2;
         let relativeSpeed = this.speed / ratioFps;
         if (this.camera.axisMovement[0]) {
             this.camera.position = new BABYLON.Vector3(this.camera.position.x + (Math.sin(this.camera.rotation.y) * relativeSpeed),
                 this.camera.position.y,
                 this.camera.position.z + (Math.cos(this.camera.rotation.y) * relativeSpeed));
+                 console.log('position', this.camera.position.z);
         }
         if (this.camera.axisMovement[1]) {
             this.camera.position = new BABYLON.Vector3(this.camera.position.x + (Math.sin(this.camera.rotation.y) * -relativeSpeed),
